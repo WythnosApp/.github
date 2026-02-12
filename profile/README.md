@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="">
-    <img alt="Wythnos" width="80" height="80" src="">
+    <img alt="Wythnos" width="80" height="80" src="https://avatars.githubusercontent.com/u/248208152?s=200&v=4">
   </picture>
 </p>
 
