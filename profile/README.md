@@ -15,9 +15,7 @@
   <img src="https://img.shields.io/badge/swiftui-declarative_UI-0070E0?style=flat-square&logo=swift&logoColor=white" />
   <img src="https://img.shields.io/badge/AI-on--device_LLM-8B5CF6?style=flat-square&logo=apple&logoColor=white" />
   <img src="https://img.shields.io/badge/privacy-100%25_local-22C55E?style=flat-square&logo=shieldsdotio&logoColor=white" />
-  <img src="https://img.shields.io/badge/IPA_size-940_KB-FF6B6B?style=flat-square" />
   <img src="https://img.shields.io/badge/languages-43-blue?style=flat-square" />
-  <img src="https://img.shields.io/badge/dependencies-0-brightgreen?style=flat-square" />
 </p>
 
 ---
@@ -29,305 +27,230 @@
 Think of it as a personal analyst for your time, living entirely on your iPhone.
 
 - 📊 **Weekly Insights** — AI analyzes your past week's events
-- 🔮 **Tomorrow Preview** — AI-generated daily briefing
+- 🔮 **Tomorrow Preview** — AI-generated daily briefing  
 - 💬 **Calendar Chat** — ask natural language questions about your schedule
+- 🔔 **Smart Notifications** — Weekly summaries, meeting reminders with deep links to Zoom/Meet
+- 🎯 **Pattern Discovery** — AI learns your habits and surfaces insights
 - 🔒 **100% On-Device** — powered by Apple Foundation Models
 
 ---
 
-## Sub-1MB Binary
+## Core Features
 
-The entire app — 14 modules, 75 tests, 43 languages, a genetic prompt evolution system — ships in a **940 KB IPA**.
+### 🤖 Self-Evolving AI System
 
-| Metric | Size |
-|---|---|
-| .app bundle (uncompressed) | 6.2 MB |
-| IPA (zip compressed) | 940 KB |
-| Estimated App Store download | ~1.0–1.5 MB |
-| Estimated install size | ~6–7 MB |
+**Zero hardcoded prompts.** The AI dynamically assembles responses from a pool of "prompt genes" that evolve based on your feedback:
 
-For context, Fantastical is ~80 MB. ChatGPT is ~250 MB. Structured is ~30 MB. Apple Calendar is ~15 MB. Wythnos is **50–250× smaller** than its competitors — with a full on-device AI engine inside.
+- **10 gene types**: persona, format, domain instructions, context templates, emotional tone, language mixing, error recovery, evolution directives, insight patterns, creative expression
+- **4 evolution stages**: Learning → Adapting → Predicting → Mastered (at 500+ interactions)
+- **Continuous improvement**: Low-fitness genes mutate, high-fitness genes proliferate
 
-### Where the Space Goes
+### 📱 Push Notifications (NEW)
 
-| Category | Uncompressed | In IPA | % of IPA |
-|---|---|---|---|
-| Seed training data (10,000 JSONL entries) | 3.6 MB | ~306 KB | 32% |
-| Executable code (app + 14 frameworks) | 2.2 MB | ~530 KB | 56% |
-| Localization (43 languages × 6 bundles) | 80 KB | ~15 KB | 2% |
-| Assets (.car color catalog) | 22 KB | ~5 KB | <1% |
+| Type | When | Content |
+|------|------|---------|
+| **Weekly Summary** | Sunday 6 PM | AI-generated week recap with stats |
+| **Week Preview** | Monday 8 AM | Upcoming week briefing |
+| **Meeting Reminders** | Before events | Join links for Zoom/Google Meet/Teams |
+| **Insight Milestones** | When discovered | Pattern discoveries with 80%+ confidence |
 
-### Why It's So Small
+**Deep Link Support:**
+- Zoom, Google Meet, Microsoft Teams, Webex, Skype, Jitsi
+- Internal: `wythnos://insights`, `wythnos://tomorrow`, `wythnos://chat`
 
-1. **Apple Foundation Models — zero model weight cost.** The AI model is pre-installed on iOS 26+ devices. No model binary to ship.
-2. **Zero third-party dependencies.** No Alamofire, no Firebase, no Sentry, no Kingfisher, no Swinject. Pure Apple frameworks.
-3. **No image assets.** SF Symbols for iconography, programmatic colors for theming. The `.car` asset catalog is 7 color definitions — 22 KB.
+### 💰 Intelligence-Based Monetization
+
+Unlike fixed-day trials, Wythnos uses an **AI maturity model**:
+
+```
+Install → Full Pro (silent, day 1)
+   ↓
+Maturity Trigger (50 interactions OR 3 patterns OR 21 days)
+   ↓
+48-Hour Grace Period (gentle inline hints)
+   ↓
+Free Tier (3 chats/day) with inline upgrade cards
+```
+
+**Pricing Tiers:**
+- **Free**: 3 AI chats/day, basic insights
+- **Pro Monthly**: $1.99 — Unlimited chat, deep analysis, all patterns
+- **Pro Annual**: $14.99 — 37% savings
+- **Lifetime**: $39.99 — Pay once, own forever
+
+### 🎨 Nyx Design System
+
+Dark, futuristic UI inspired by sci-fi interfaces:
+
+- **Dark only**: #000000 backgrounds, no light mode
+- **Matrix green**: #00FF88 for AI accents
+- **Animations**: Character-by-character typing, number count-ups, spring physics
+- **Haptics**: Feedback on every meaningful interaction
+- **Custom tab bar**: Centered "W" glyph with glow effect
 
 ---
 
-## Architecture: 14 Modules, Zero Dependencies
+## Architecture
 
-The app is a modular monorepo managed by [Tuist](https://tuist.dev). The `Project.swift` manifest defines everything — no `.xcodeproj` in the repo, no manual Xcode configuration drift.
+### 15 Modules, Clean Dependencies
 
 ```
 Wythnos (App)
-├── Core Modules (9)
-│   ├── ServiceProvider     — Custom DI container (NSLock, protocol-based)
-│   ├── WythnosLogger       — Structured os.log with level filtering
-│   ├── AnalyticsService    — Pluggable analytics (os.log backend, no third-party)
-│   ├── UserProfileService  — UserDefaults-backed preferences
+├── Core Modules (10)
+│   ├── ServiceProvider     — Custom DI container
+│   ├── WythnosLogger       — Structured logging
+│   ├── AnalyticsService    — TelemetryDeck + os.log backends
+│   ├── UserProfileService  — Preferences & onboarding state
 │   ├── CalendarService     — EventKit abstraction
-│   ├── CalendarStore       — CoreData persistence + delta sync
-│   ├── LLMEngine           — Apple Foundation Models + self-evolving prompts
-│   ├── SubscriptionService — StoreKit 2
-│   └── DesignSystem        — Tokens, components, animations
+│   ├── CalendarStore       — CoreData persistence
+│   ├── LLMEngine           — Apple Foundation Models + prompt evolution
+│   ├── SubscriptionService — StoreKit 2 with TrialManager
+│   ├── NotificationService — Local push notifications with deep linking
+│   └── DesignSystem        — Nyx tokens, components, animations
 └── Feature Modules (5)
-    ├── OnboardingUI        — 7-step flow with calendar walkthrough
-    ├── InsightsUI          — Weekly AI dashboard
+    ├── OnboardingUI        — 7-step boot sequence
+    ├── InsightsUI          — Weekly AI dashboard with stats
     ├── ChatUI              — Conversational calendar queries
     ├── TomorrowUI          — Next-day AI briefing
-    └── SettingsUI          — Profile, theme, subscription, about
+    └── SettingsUI          — System settings, subscription, Neural Engine stats
 ```
 
-Every module is its own framework target with a matching unit test target. Every commit in the 22-commit history compiles independently. The dependency graph is explicit and enforced by the build system.
-
-### Architecture & Build System
+### Build System
 
 | | |
 |---|---|
-| **Build System** | [Tuist](https://tuist.dev) — declarative `Project.swift` manifest for reproducible Xcode project generation |
-| **Architecture** | Modular monorepo — isolated Core frameworks and Feature modules with explicit dependency graphs |
-| **Dependency Injection** | Custom `ServiceProvider` container with protocol-based `DependencySpec` pattern — fully compile-time safe |
-| **Concurrency** | Swift structured concurrency (`async/await`, `Actor`, `@Sendable`) throughout the entire stack |
+| **Build System** | [Tuist](https://tuist.dev) — declarative `Project.swift` manifest |
+| **Architecture** | Modular monorepo with explicit dependency graphs |
+| **Dependency Injection** | Custom `ServiceProvider` with protocol-based `DependencySpec` |
+| **Concurrency** | Swift structured concurrency (`async/await`, `Actor`) throughout |
 | **Minimum Target** | iOS 26.0, iPhone only |
 
 ---
 
 ## Why Apple Foundation Models
 
-We evaluated four alternatives before choosing Apple's on-device Foundation Models framework:
-
-| Alternative | Why Not |
-|---|---|
-| ExecuTorch + Llama 3.2 1B | 500MB+ model binary, complex setup, battery drain |
-| llama.cpp + GGUF | CPU-only on iOS, no Neural Engine, must ship model |
-| MLC-LLM | Extra compilation step, no App Store precedent |
-| Core ML + custom model | ML expertise for conversion, updates require app updates |
-
 Apple Foundation Models wins because:
 
-- **Zero download** — the model is pre-installed on iOS 26+ devices
-- **Neural Engine optimized** — A17 Pro delivers ~35 TOPS with mxfp4 hardware support
-- **OS-managed resources** — Apple handles memory, power, and thermal budgets
-- **Privacy enforced by the OS** — not just our promise, Apple's guarantee
-- **Free upgrades** — model improves with every iOS update
-- **Streaming responses** — token-by-token generation via `AsyncThrowingStream`
-
-Research basis: [*On-Device LLMs: State of the Union, 2026*](https://v-chandra.github.io/on-device-llms/) by Vikas Chandra & Raghuraman Krishnamoorthi (Meta AI Research).
-
----
-
-## Self-Evolving Prompt System (Prompt Genes)
-
-**Wythnos has zero hardcoded prompts.** Not a single string literal in the codebase constitutes a prompt to the LLM. Every prompt is dynamically assembled at runtime from composable units called **prompt genes**.
-
-### What is a Prompt Gene?
-
-A `PromptGene` is a Swift struct with:
-- **Type** — one of 10 categories: `systemPersona`, `responseFormat`, `domainInstruction`, `contextTemplate`, `evolutionDirective`, `insightPattern`, `emotionalTone`, `languageMixing`, `errorRecovery`, `creativeExpression`
-- **Content** — the actual prompt text
-- **Fitness Score** — a float (0.0–1.0) updated with exponential moving average based on user feedback
-- **Evolution Directive** — instructions that tell the system HOW the gene should mutate
-
-### How Prompt Assembly Works
-
-When the user asks a question, `DynamicPromptEngine.synthesizePrompt()` runs tournament selection across the gene pool:
-
-1. Select the highest-fitness **persona** gene
-2. Select the best **response format** gene
-3. Select the most relevant **domain instruction** gene (based on intent classification)
-4. Fill a **context template** gene with live calendar data
-5. Add **emotional tone**, **language mixing**, and **error recovery** genes
-6. Attach the current **evolution directive**
-
-10% of the time, a random lower-fitness gene is selected instead — the exploration rate that prevents convergence on a local optimum.
-
-### How Genes Evolve
-
-After every interaction, genes are scored with an exponential moving average:
-
-```swift
-gene.fitnessScore = 0.1 * signal + 0.9 * gene.fitnessScore
-```
-
-- If fitness drops below **0.3** after 10+ uses → the gene **mutates** (new gene created with modified content based on its evolution directive)
-- Bottom **20%** fitness genes get **pruned** after 30 days
-
-The system has four **evolution stages**:
-
-| Stage | Interactions | Behavior |
-|---|---|---|
-| 1 | 0–50 | **Learning** — language, format, time preferences |
-| 2 | 50–200 | **Adapting** — priorities, habits, patterns |
-| 3 | 200–500 | **Predicting** — anticipating needs before asked |
-| 4 | 500+ | **Mastered** — proactive, personalized, trusted |
-
-The app ships with ~30 seed genes across all 10 types. Each seed gene contains its own evolution directive — **the seeds are designed to be replaced**.
+- **Zero download** — pre-installed on iOS 26+ devices
+- **Neural Engine optimized** — A17 Pro delivers ~35 TOPS with mxfp4
+- **OS-managed resources** — Apple handles memory, power, thermal
+- **Privacy enforced by OS** — not just our promise, Apple's guarantee
+- **Free upgrades** — model improves with iOS updates
+- **Streaming responses** — token-by-token via `AsyncThrowingStream`
 
 ---
 
 ## Pattern Evolution Engine
 
-The `PatternEvolutionEngine` discovers behavioral patterns from calendar data and user interactions:
+Discovers behavioral patterns from calendar data:
 
 - Meeting frequency trends (increasing/decreasing)
 - Day-of-week preferences (busiest/quietest day)
 - Time-of-day preferences (morning vs. afternoon person)
 - Duration patterns (preference for short meetings)
 - Work-life balance signals (weekend events, late meetings)
-- Calendar usage distribution (primary vs. secondary calendars)
 - Free time erosion (are free blocks shrinking?)
 
-When a pattern is discovered with **>60% confidence**, it's **converted into a new prompt gene** and injected into the gene pool. The app literally creates new prompt intelligence from observed behavior.
+When confidence > 60%, patterns become new prompt genes.
+
+---
+
+## Notification System Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│              NotificationController                     │
+├─────────────────────────────────────────────────────────┤
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│  │  Scheduler   │  │  ContentGen  │  │ DeepLinkHandler│ │
+│  └──────────────┘  └──────────────┘  └──────────────┘  │
+└─────────────────────────────────────────────────────────┘
+         ↓                    ↓                 ↓
+    Weekly/              LLM-generated     Zoom/Meet/Teams
+    Meeting              personalized      URL scheme
+    Insights             text              detection
+```
+
+**LLM Content Generation:** Notifications are personalized to user's language and calendar context using the same prompt gene system as chat.
 
 ---
 
 ## Data Flow
 
 ```
-EventKit (System) → CalendarService → CalendarSyncManager → CalendarStore (CoreData)
-                                                                    ↓
-                                                           DynamicPromptEngine
-                                                                    ↓
-                                                      Apple Foundation Models (on-device)
-                                                                    ↓
-                                                               User-facing UI
+EventKit → CalendarService → CalendarSyncManager → CalendarStore (CoreData)
+                                                            ↓
+                              DynamicPromptEngine ← Prompt Gene Pool
+                                                            ↓
+                                               Apple Foundation Models
+                                                            ↓
+                              ┌─────────────────┬──────────┴──────────┐
+                              ↓                 ↓                     ↓
+                         User-facing      Push Notifications     Pattern
+                             UI            (Local, on-device)    Detection
 ```
 
 - **Full sync:** Last 90 days + next 7 days
-- **Incremental sync:** Since last sync + rolling 7-day window (on each foreground)
-- **Background sync:** `BGTaskScheduler` with registered task identifier
+- **Incremental sync:** Since last sync + rolling window
+- **Background sync:** BGTaskScheduler
 
 ---
 
 ## On-Device LLM Optimization Techniques
 
-The architecture is designed to support 15+ optimization techniques as the AI layer matures:
-
-### Inference Speed
-
-| Technique | Description |
-|---|---|
-| **Speculative Decoding** | 135M draft model generates 5 candidate tokens, verified in one forward pass. Calendar responses have high predictability — acceptance rates can exceed 80%. |
-| **Continuous Batching** | Multiple insight queries processed together during idle time for ~40% speedup |
-| **KV-Cache Reuse** | Follow-up questions reuse cached KV states from system prompt and calendar context |
-
-### Memory Optimization
-
-| Technique | Description |
-|---|---|
-| **KV-Cache Paging** | Fixed-size pages from a memory pool to avoid fragmentation, with calendar-recency eviction |
-| **Flash Attention** | Tiled attention via Metal Performance Shaders — O(N) memory instead of O(N²) |
-| **Grouped-Query Attention (GQA)** | Fewer KV heads than query heads, reducing KV-cache memory by up to 8× |
-
-### Quantization
-
-| Technique | Description |
-|---|---|
-| **AWQ** (Activation-Aware Weight Quantization) | Preserves salient weight channels at higher precision. Temporal tokens stay at 8-bit. |
-| **GPTQ** (Generalized Post-Training Quantization) | One-shot quantization using seed calendar dataset as calibration data |
-| **K-Quant (GGUF)** | Per-block scaling with importance-weighted bit allocation. Q4_K_M saves 60% memory with <1% perplexity loss. |
-
-### On-Device Training
-
-| Technique | Description |
-|---|---|
-| **QLoRA** | Frozen 4-bit base model with trainable rank-8 adapter matrices (~2.5 MB per adapter — 1000× smaller than the model) |
-| **Gradient Checkpointing** | Recompute activations during backward pass — 30% more compute, 60% less memory |
-| **DPO** (Direct Preference Optimization) | Thumbs up/down pairs train the adapter directly — no reward model needed |
-
-### Domain-Specific
-
-| Technique | Description |
-|---|---|
-| **Calendar-Aware Attention** | Attention boundaries aligned with event boundaries, not fixed sliding windows |
-| **Dynamic Token Budgets** | "next meeting?" gets 256 tokens; "monthly analysis" gets 4096 |
-| **Batched Proactive Inference** | Pre-compute insights during idle GPU cycles for instant display |
-
-### Model Lifecycle
-
-| Technique | Description |
-|---|---|
-| **Model Distillation** | Knowledge transfer from larger teacher models into compact student models optimized for calendar domain |
-| **Structured Pruning** | Remove entire channels (not individual weights) while preserving calendar-domain knowledge |
-| **Adapter Versioning & Rollback** | QLoRA adapter checkpointing with automatic rollback if adaptation quality degrades |
-| **Continuous Learning Pipeline** | Self-evolving prompt engine with evolutionary gene pool — prompts mutate and specialize based on user interaction patterns |
+| Category | Technique | Description |
+|----------|-----------|-------------|
+| **Inference Speed** | Speculative Decoding | 135M draft model, 80%+ acceptance |
+| | Continuous Batching | ~40% speedup during idle |
+| **Memory** | KV-Cache Reuse | Follow-up queries faster |
+| | Flash Attention | O(N) vs O(N²) memory |
+| **Quantization** | AWQ/GPTQ | 60% memory savings |
+| **Training** | QLoRA | Rank-8 adapters, 1000× smaller |
+| | DPO | Direct preference optimization |
 
 ---
 
 ## Privacy Architecture
 
-Privacy isn't a feature toggle. It's the architecture.
-
-- **No network calls** for inference, training, or analytics
-- **CoreData** for local persistence — programmatic `NSManagedObjectModel`, no `.xcdatamodeld`
-- **MetricKit** for crash reporting — Apple-native, no Firebase Crashlytics, no Sentry
-- **os.log** for analytics — structured, no Mixpanel, no Amplitude
-- **StoreKit 2** for subscriptions — server-free receipt validation
-- **EventKit** for calendar access — data never serialized to any external endpoint
-
-The app's `Info.plist` contains two privacy-related keys. That's it.
+- **No network calls** for inference, training, or core analytics
+- **CoreData** — local persistence, programmatic schema
+- **TelemetryDeck** — privacy-first analytics (EU-hosted, no PII)
+- **MetricKit** — crash reporting, no third-party SDK
+- **StoreKit 2** — server-free receipt validation
+- **EventKit** — data never serialized externally
 
 ---
 
 ## Technology Stack
 
 ### Apple Frameworks
+- **SwiftUI** — Declarative UI with `@StateObject`, `@Environment`
+- **Foundation Models** — iOS 26+ on-device LLM
+- **EventKit** — Native calendar access
+- **CoreData** — Local persistence
+- **StoreKit 2** — Subscriptions
+- **UserNotifications** — Local push notifications
+- **MetricKit** — Crash reporting
+- **BGTaskScheduler** — Background sync
 
-- **SwiftUI** — Declarative UI with `@StateObject`, `@Published`, `@Environment`, `TabView`, `LazyVStack`
-- **Foundation Models** (`FoundationModels` framework) — Apple's on-device LLM, iOS 26+, zero model download
-- **EventKit** — Native calendar access with full read permissions
-- **CoreData** — Local persistence for calendar snapshots, sync state, and training data
-- **StoreKit 2** — Modern subscription and in-app purchase handling
-- **MetricKit** — Crash reporting and performance metrics via `MXMetricManager` (no third-party crash SDK)
-- **os.log** — Unified structured logging across all modules
-- **BGTaskScheduler** — Background calendar sync scheduling
+### Third-Party Dependencies
+- **TelemetryDeck** (1 dependency) — Privacy-first analytics
 
 ### Data & Persistence
-
-- **CoreData** with programmatic `NSManagedObjectModel` — no `.xcdatamodeld` files, fully code-defined schema
-- **Calendar delta sync** — 90-day lookback + 7-day forecast, diffed against local store
-- **Actor-isolated stores** — `CalendarStore` is a Swift `actor` for thread-safe CoreData access
+- Programmatic `NSManagedObjectModel` — no `.xcdatamodeld`
+- Delta sync with 90-day lookback
+- Actor-isolated stores for thread safety
 
 ### UI & Design
+- **Nyx Design System** — Tokens, components, animations
+- Dark-first aesthetic (#000000 backgrounds)
+- 43 languages via String Catalogs
 
-- **Custom design system** — `WythnosColors`, `WythnosTypography`, `WythnosSpacing`, `WythnosCornerRadius`
-- **Dark-first aesthetic** — black backgrounds, white/purple accents
-- **Reusable components** — `WythnosPrimaryButton`, `WythnosTextField`, `WythnosLoadingView`, `WythnosCard`
-- **Splash animation** — Pulsing circle → scale transition into 7-step onboarding flow
-
-### Localization
-
-**43 languages at launch.** Xcode String Catalogs (`.xcstrings`) with per-module bundles. Compiler-verified via `String(localized:bundle:)`.
-
-Coverage spans Western Europe, Eastern Europe, Middle East (Arabic, Hebrew, Turkish), South Asia (Hindi, Bengali, Tamil), Southeast Asia (Thai, Vietnamese, Indonesian, Malay, Filipino), East Asia (Japanese, Korean, Chinese Simplified & Traditional), and Africa (Swahili).
-
-### Quality & Testing
-
-- **Swift Testing framework** (`@Suite`, `@Test`, `#expect`) — modern test API, no XCTest
-- **75 unit tests** across **14 test targets** — all passing on iOS 26.2 Simulator (iPhone 17 Pro)
-- **Protocol-based mocking** — services are testable via protocol conformance, no third-party mocking libraries
-- **In-memory CoreData** — tests use `NSInMemoryStoreType` for fast, isolated data layer testing
-
-### CI & Developer Experience
-
-- **Two CI pipelines** on GitHub Actions:
-  1. Unit tests — all 14 schemes sequentially on macOS 15
-  2. Snapshot tests — matrix strategy across 3 devices (iPhone 17 Pro, Pro Max, 16e)
-- Both use concurrency groups to cancel superseded runs and upload test artifacts
-- **Tuist project generation** — `tuist generate` for deterministic Xcode project from `Project.swift` manifest
-- **No CocoaPods / SPM for dependencies** — zero third-party dependencies, pure Apple frameworks
-- **Module-level `Bundle.module`** — each feature module bundles its own resources and localization
+### Testing
+- **Swift Testing framework** — `@Suite`, `@Test`, `#expect`
+- **75+ unit tests** across test targets
+- Protocol-based mocking
+- In-memory CoreData for tests
 
 ---
 
@@ -335,44 +258,128 @@ Coverage spans Western Europe, Eastern Europe, Middle East (Arabic, Hebrew, Turk
 
 | Metric | Value |
 |---|---|
-| Swift source files | 56 |
-| Lines of code | ~4,500 |
-| Core modules | 9 |
+| Swift source files | 60+ |
+| Core modules | 10 |
 | Feature modules | 5 |
-| Unit tests | 75 (all passing) |
-| Test targets | 14 |
-| Localization bundles | 6 |
+| Unit tests | 75+ |
 | Languages | 43 |
-| CI pipelines | 2 |
-| Git commits | 22 (each compiles independently) |
-| Third-party dependencies | 0 |
+| Dependencies | 1 (TelemetryDeck) |
 | Hardcoded prompts | 0 |
 | Network calls for AI | 0 |
-| IPA size | 940 KB |
-| Est. App Store download | ~1.0 MB |
+
+---
+
+## Documentation
+
+| Document | Purpose |
+|----------|---------|
+| [Push Notification Strategy](../../Docs/PushNotificationStrategy.md) | Notification architecture |
+| [Notification Integration](../../Docs/NotificationIntegrationGuide.md) | Setup guide |
+| [Testing with Mock Data](../../Docs/TestingWithMockData.md) | Debug modes |
+| [Monetization Strategy](../../Done/monetization-strategy.md) | Revenue model |
+| [Nyx Design System](../../Done/redesign-nyx-design-system.md) | Design specs |
+| [Hugging Face Models](../../Done/HUGGING_FACE_MODELS.md) | Vision/LLM options |
+
+---
+
+## LLM Stress Testing & Hardening
+
+Wythnos ships with a **fully automated hardening pipeline** that validates every AI response pattern before production. The pipeline simulates 192 real-world calendar scenarios derived from 5 Hugging Face dataset archetypes and runs 10 validation checks per pair.
+
+### Run it yourself
+
+```bash
+cd Wythnos
+make harden-llm
+```
+
+### Pipeline
+
+```
+make transform-data          make test-simulation          make deploy-genes
+       ↓                            ↓                            ↓
+  Python script              Swift validation engine       Verify gene injection
+  generates 192 pairs        scores each pair on 10        into SeedHardeningProvider
+  from 5 HF archetypes       dimensions, writes report     and SeedDataLoader
+```
+
+### Dataset Coverage (192 pairs)
+
+| Source Archetype | Count | What it tests |
+|---|---|---|
+| **MeetingBank** | 40 | Dense transcript summarization — budgets, deadlines, action items |
+| **MultiWOZ** | 40 | Multi-step scheduling — gap finding, rescheduling, conflict-aware booking |
+| **GUM** | 30 | Emotional context — overwhelmed users, work-life balance signals |
+| **Taskmaster** | 30 | Natural language booking — "Book a dentist on Friday at 3" |
+| **AMI Corpus** | 30 | Pattern recognition — trend detection, week-over-week comparison |
+| **Edge Cases** | 10 | Empty calendars, ambiguous names, timezone, off-topic refusal, all-day events, recurring events, back-to-back fatigue, calendar math |
+| **Multilingual** | 12 | Turkish, Spanish, French, German, Japanese, Korean, Welsh, Arabic, Dutch, Portuguese, Italian |
+
+### 10 Validation Checks
+
+| # | Check | What it catches |
+|---|---|---|
+| 1 | `response_nonempty` | Missing or blank responses |
+| 2 | `context_nonempty` | Queries without calendar context |
+| 3 | `time_grounding` | Responses that don't reference real times from context |
+| 4 | `no_hallucinated_names` | Person names invented by the model |
+| 5 | `no_empty_cal_hallucination` | Fabricated events on empty calendars |
+| 6 | `offtopic_refusal` | Off-topic queries that aren't properly refused |
+| 7 | `conflict_flagged` | Overlapping events not flagged with ⚠️ |
+| 8 | `empathy_present` | Emotional queries answered without warmth |
+| 9 | `locale_match` | Non-English queries answered in English |
+| 10 | `contains_numbers` | Analytical responses missing numerical data |
+
+### Results
+
+```
+Total:      192 pairs
+Passed:     192 (100.0%)
+
+  edgeCase              ████████████████████ 100%
+  emotionalContext      ████████████████████ 100%
+  eventCreation         ████████████████████ 100%
+  meetingIntelligence   ████████████████████ 100%
+  multiStepScheduling   ████████████████████ 100%
+  multilingual          ████████████████████ 100%
+  patternRecognition    ████████████████████ 100%
+```
+
+### Feedback Loop
+
+Stress test learnings are fed back into the app's initial seed data via `SeedHardeningProvider` → `SeedDataLoader`, ensuring every install starts with intelligence hardened against known failure modes. This follows the **Teacher-Student Curriculum** pattern from DeepMind research and **RLAIF** from Anthropic.
+
+### Language Intelligence Tiering
+
+The LLM supports 43 UI languages but uses a **tiered intelligence model**:
+
+| Tier | Languages | Strategy |
+|---|---|---|
+| **Primary** | EN, ES, FR, DE, ZH, JA, KO, PT, IT, NL, TR, AR | Full native prompting |
+| **Secondary** | All other 31 languages | Translated Prompting (English reasoning → local output) |
+
+Reports are saved to `Reports/hardening_results.json` (machine-readable) and `Reports/hardening_summary.txt` (human-readable).
 
 ---
 
 ## We're Looking for Collaborators
 
-Wythnos is ambitious and we're looking for people who want to build something meaningful. If any of these resonate with you, we'd love to talk:
+**🧠 On-Device ML / LLM Engineers**  
+Speculative decoding, QLoRA, KV-cache optimization, prompt evolution
 
-**🧠 On-Device ML / LLM Engineers**
-Help us push the boundaries of what's possible with on-device intelligence — speculative decoding, QLoRA fine-tuning, KV-cache optimization, prompt evolution systems.
+**📱 iOS Engineers**  
+SwiftUI, structured concurrency, modular architecture
 
-**📱 iOS Engineers**
-SwiftUI, structured concurrency, modular architecture, CoreData — if you care about well-architected iOS apps, this is your playground.
+**🎨 Design Engineers**  
+Dark interfaces, motion design, typography systems
 
-**🎨 Design Engineers**
-We're building a dark, minimal, typography-driven interface. If you think about spacing tokens and motion design, come shape the experience.
-
-**🔬 Research-Oriented Builders**
-Self-evolving prompt systems, behavioral pattern recognition, calendar-aware attention mechanisms — there's real research happening here.
+**🔬 Research-Oriented Builders**  
+Behavioral pattern recognition, calendar-aware attention
 
 ---
 
 <p align="center">
   <sub>Built with ❤️ by <a href="https://alp.me">Alp Özcan</a> from Amsterdam</sub><br/>
-  <sub>100% on-device · Zero third-party dependencies · Privacy by architecture</sub><br/>
+  <sub>100% on-device · Privacy by architecture · Intelligence-based monetization</sub><br/>
   <sub>Built with <a href="https://pi.dev">pi</a> + Anthropic Claude</sub>
 </p>
